@@ -1,1 +1,151 @@
+4th task:
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            color: #ff4c29;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            background-color: #16213e;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #00f2ff;
+        }
+        .task-input, .time-input {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .add-btn {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #ff4c29;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f3460;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+            flex-wrap: wrap;
+        }
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #00f2ff;
+        }
+        .task-btn {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .complete-btn {
+            background-color: #00f2ff;
+            color: black;
+        }
+        .edit-btn {
+            background-color: #ffcc29;
+        }
+        .delete-btn {
+            background-color: #ff4c29;
+            color: white;
+        }
+        .task-meta {
+            font-size: 12px;
+            color: #ffcc29;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <div class="container">
+        <input type="text" id="taskInput" class="task-input" placeholder="Enter a task...">
+        <input type="datetime-local" id="taskTime" class="time-input">
+        <button class="add-btn" onclick="addTask()">Add Task</button>
+        <ul class="task-list" id="taskList"></ul>
+    </div>
+    
+    <script>
+        function addTask() {
+            let taskInput = document.getElementById("taskInput");
+            let taskTime = document.getElementById("taskTime");
+            let taskText = taskInput.value.trim();
+            let taskDeadline = taskTime.value;
+            if (taskText === "") return;
+            
+            let taskList = document.getElementById("taskList");
+            let li = document.createElement("li");
+            li.classList.add("task-item");
+            let currentTime = new Date().toLocaleString();
+            
+            li.innerHTML = `
+                <div>
+                    <span class="task-text">${taskText}</span>
+                    <div class="task-meta">Created: ${currentTime}</div>
+                    ${taskDeadline ? <div class="task-meta">Deadline: ${new Date(taskDeadline).toLocaleString()}</div> : ''}
+                </div>
+                <div>
+                    <button class="task-btn complete-btn" onclick="completeTask(this)">✔</button>
+                    <button class="task-btn edit-btn" onclick="editTask(this)">✏</button>
+                    <button class="task-btn delete-btn" onclick="deleteTask(this)">✖</button>
+                </div>
+            `;
+            
+            taskList.appendChild(li);
+            taskInput.value = "";
+            taskTime.value = "";
+        }
+        
+        function completeTask(button) {
+            let taskItem = button.parentElement.parentElement;
+            taskItem.classList.toggle("completed");
+        }
+        
+        function editTask(button) {
+            let taskItem = button.parentElement.parentElement;
+            let taskText = taskItem.querySelector(".task-text");
+            let newTask = prompt("Edit your task:", taskText.textContent);
+            if (newTask) {
+                taskText.textContent = newTask;
+                let metaData = taskItem.querySelector(".task-meta");
+                let modifiedTime = new Date().toLocaleString();
+                metaData.innerHTML = Modified: ${modifiedTime};
+            }
+        }
+        
+        function deleteTask(button) {
+            let taskItem = button.parentElement.parentElement;
+            taskItem.remove();
+        }
+    </script>
+</body>
+</html>
